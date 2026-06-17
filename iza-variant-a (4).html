@@ -1,0 +1,731 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Iza Bilska — Fotografia Wieliczka</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@300;400;500&family=Raleway:wght@400;500;600;700&display=swap" rel="stylesheet"/>
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+
+/* ── TOKENS ─────────────────────────────── */
+:root{
+  --ink:       #2C2A1E;
+  --olive:     #74714B;
+  --cream:     #F6F3ED;
+  --sand:      #EDE7DC;
+  --warm:      #E8E1D5;  /* header / footer */
+  --muted:     rgba(44,42,30,.55);
+
+  /* type scale */
+  --h1: clamp(52px, 6.5vw, 88px);
+  --h2: clamp(36px, 4vw,  56px);
+  --h3: clamp(24px, 2.5vw,36px);
+  --base: 15px;
+  --sm:  13px;
+  --xs:  11px;
+
+  /* spacing */
+  --section: 96px;
+  --section-h: 48px; /* half for mobile */
+  --gap: 10px;
+  --r: 8px;          /* universal border-radius */
+}
+
+html{scroll-behavior:smooth}
+body{
+  background:var(--cream);
+  color:var(--ink);
+  font-family:'Raleway',sans-serif;
+  font-size:var(--base);
+  line-height:1.78;
+  overflow-x:hidden;
+}
+
+/* ── TYPE SYSTEM ─────────────────────────
+   Cormorant → display headings only
+   Raleway   → everything else
+─────────────────────────────────────────*/
+.t-display{
+  font-family:'Cormorant Garamond',serif;
+  font-weight:300;
+  line-height:.92;
+  letter-spacing:-1.5px;
+  color:var(--ink);
+}
+.t-h1{ font-size:var(--h1); }
+.t-h2{ font-size:var(--h2); letter-spacing:-1px; }
+.t-h3{ font-size:var(--h3); letter-spacing:-.5px; }
+
+.t-label{
+  font-family:'Raleway',sans-serif;
+  font-size:13px;
+  font-weight:600;
+  letter-spacing:2.5px;
+  text-transform:uppercase;
+  color:var(--ink);
+  opacity:.55;
+}
+.t-body { font-size:var(--base); line-height:1.8; color:var(--ink); opacity:.7; }
+.t-small{ font-size:var(--sm);  line-height:1.8; color:var(--ink); opacity:.65; }
+
+/* ── REVEAL — fade + scale ───────────────*/
+.r{
+  opacity:0;
+  transform:scale(0.96);
+  transition:opacity .7s cubic-bezier(.25,.46,.45,.94), transform .7s cubic-bezier(.25,.46,.45,.94);
+}
+.r.v{opacity:1;transform:scale(1)}
+.d1{transition-delay:.12s}.d2{transition-delay:.26s}.d3{transition-delay:.42s}
+@media(prefers-reduced-motion:reduce){.r{opacity:1;transform:none;transition:none}}
+
+/* ── BUTTONS ─────────────────────────────
+   One system: border + bg on hover
+   radius: var(--r) everywhere
+─────────────────────────────────────────*/
+.btn{
+  display:inline-flex;align-items:center;justify-content:center;
+  font-family:'Raleway',sans-serif;
+  font-size:var(--xs);font-weight:700;letter-spacing:2.5px;text-transform:uppercase;
+  text-decoration:none;
+  padding:15px 28px;
+  border-radius:var(--r);
+  border:1.5px solid var(--olive);
+  color:var(--ink);
+  background:transparent;
+  cursor:pointer;
+  transition:background .22s,color .22s,transform .18s,box-shadow .18s;
+  white-space:nowrap;
+}
+.btn:hover{background:var(--olive);color:var(--cream);transform:translateY(-2px);box-shadow:0 6px 20px rgba(116,113,75,.18)}
+.btn:active{transform:none;box-shadow:none}
+
+.btn-light{border-color:rgba(245,243,237,.5);color:var(--cream)}
+.btn-light:hover{background:rgba(245,243,237,.12);border-color:var(--cream);color:var(--cream);box-shadow:none}
+
+.btn-full{width:100%}
+
+/* chip — pill shape only for small label badges */
+.chip{
+  font-family:'Raleway',sans-serif;
+  font-size:9px;font-weight:700;letter-spacing:2px;text-transform:uppercase;
+  color:var(--cream);
+  border:1px solid rgba(245,243,237,.4);
+  padding:3px 12px;
+  border-radius:40px;
+  opacity:.75;
+}
+
+/* ── HEADER ──────────────────────────────*/
+header{
+  position:fixed;top:0;left:0;right:0;z-index:100;
+  display:flex;align-items:center;justify-content:space-between;
+  padding:16px 60px;
+  background:var(--warm);
+  border-bottom:1px solid rgba(116,113,75,.14);
+  transition:box-shadow .3s;
+}
+header.scrolled{box-shadow:0 2px 20px rgba(116,113,75,.1)}
+
+.logo{
+  font-family:'Cormorant Garamond',serif;
+  font-size:20px;font-weight:400;letter-spacing:3px;text-transform:uppercase;
+  color:var(--ink);text-decoration:none;
+}
+
+nav{display:flex;gap:36px;align-items:center}
+nav a{
+  font-family:'Raleway',sans-serif;
+  font-size:14px;font-weight:600;letter-spacing:1.5px;text-transform:uppercase;
+  color:var(--ink);text-decoration:none;opacity:.75;
+  position:relative;padding-bottom:2px;
+  transition:opacity .2s;
+}
+nav a::after{content:'';position:absolute;bottom:0;left:0;right:100%;height:1px;background:var(--olive);transition:right .25s}
+nav a:hover{opacity:1}
+nav a:hover::after{right:0}
+
+/* ── MOBILE ──────────────────────────────*/
+.burger{display:none;flex-direction:column;gap:5px;cursor:pointer;background:none;border:none;padding:4px}
+.burger span{display:block;width:22px;height:1.5px;background:var(--ink);transition:transform .3s,opacity .3s}
+.burger.open span:nth-child(1){transform:translateY(6.5px) rotate(45deg)}
+.burger.open span:nth-child(2){opacity:0}
+.burger.open span:nth-child(3){transform:translateY(-6.5px) rotate(-45deg)}
+
+.mobile-menu{
+  display:none;position:fixed;inset:0;background:var(--warm);z-index:99;
+  flex-direction:column;align-items:center;justify-content:center;gap:32px;
+  opacity:0;pointer-events:none;transition:opacity .3s;
+}
+.mobile-menu.open{opacity:1;pointer-events:all}
+.mobile-menu a{
+  font-family:'Cormorant Garamond',serif;font-size:42px;font-weight:300;
+  color:var(--ink);text-decoration:none;letter-spacing:1px;transition:opacity .2s;
+}
+.mobile-menu a:hover{opacity:.5}
+
+/* hero text — появляется при загрузке */
+.hero-text > *{
+  opacity:0;
+  transform:scale(0.97);
+  animation:heroFade .8s cubic-bezier(.25,.46,.45,.94) forwards;
+}
+.hero-text > *:nth-child(1){animation-delay:.3s}
+.hero-text > *:nth-child(2){animation-delay:.5s}
+.hero-text > *:nth-child(3){animation-delay:.7s}
+.hero-text > *:nth-child(4){animation-delay:.9s}
+@keyframes heroFade{
+  to{opacity:1;transform:scale(1)}
+}
+/* убираем класс .r с hero элементов чтобы не конфликтовало */
+.hero-text .r{animation:heroFade .8s cubic-bezier(.25,.46,.45,.94) forwards;transform:scale(0.97)}
+.hero{
+  min-height:100svh;
+  display:grid;grid-template-columns:1fr 1fr;
+  padding-top:0;
+}
+.hero-img{position:relative;overflow:hidden}
+.hero-img img{
+  width:100%;height:100%;
+  object-fit:cover;object-position:center 20%;
+  display:block;
+  transform:scale(1.08);
+  animation:heroZoom 1.4s cubic-bezier(.25,.46,.45,.94) forwards;
+}
+@keyframes heroZoom{
+  to{transform:scale(1)}
+}
+
+.hero-text{
+  display:flex;flex-direction:column;justify-content:flex-end;
+  padding:120px 60px 80px 56px;
+  background:var(--cream);
+}
+.hero-text .t-label{margin-bottom:20px}
+.hero-text .t-display{margin-bottom:36px}
+.hero-text .t-body{max-width:300px;margin-bottom:40px}
+
+/* ── MARQUEE ─────────────────────────────*/
+.marquee-wrap{background:var(--olive);overflow:hidden;padding:13px 0}
+.marquee-track{display:flex;width:max-content;animation:ticker 32s linear infinite}
+.marquee-wrap:hover .marquee-track{animation-play-state:paused}
+@keyframes ticker{from{transform:translateX(0)}to{transform:translateX(-50%)}}
+.marquee-item{
+  font-family:'Raleway',sans-serif;
+  font-size:10px;font-weight:600;letter-spacing:3.5px;text-transform:uppercase;
+  color:var(--cream);opacity:.65;white-space:nowrap;padding:0 32px;
+}
+
+/* ── GALLERY ─────────────────────────────*/
+.gallery{
+  padding:var(--section) 60px;
+  background:linear-gradient(170deg,var(--cream) 0%,var(--sand) 100%);
+}
+.gallery-head{
+  display:flex;align-items:flex-end;justify-content:space-between;
+  margin-bottom:48px;gap:24px;
+}
+.gallery-grid{
+  display:grid;
+  grid-template-columns:1.4fr 1fr 1fr;
+  grid-template-rows:360px 240px;
+  gap:var(--gap);
+}
+.gcell{border-radius:var(--r);overflow:hidden;background:var(--sand)}
+.gcell img{width:100%;height:100%;object-fit:cover;display:block;transition:transform .6s cubic-bezier(.25,.46,.45,.94)}
+.gcell:hover img{transform:scale(1.05)}
+.gcell.tall{grid-row:span 2}
+.gcell.wide{grid-column:span 2}
+
+/* ── ABOUT ───────────────────────────────*/
+.about{display:grid;grid-template-columns:1.1fr 1fr}
+
+.about-img{position:relative;overflow:hidden;min-height:580px}
+.about-img img{
+  width:100%;height:100%;
+  object-fit:cover;object-position:center 15%;
+  display:block;transition:transform .6s ease;
+}
+.about-img:hover img{transform:scale(1.03)}
+
+.about-text{
+  background:var(--sand);
+  padding:80px 56px;
+  display:flex;flex-direction:column;justify-content:center;
+  gap:24px;
+}
+.about-text .t-label{margin-bottom:4px}
+.about-text .t-body p+p{margin-top:14px}
+
+/* ── PACKAGES ────────────────────────────*/
+.packages{
+  padding:var(--section) 60px;
+  background:var(--olive);
+}
+.packages-head{
+  display:flex;align-items:flex-end;justify-content:space-between;
+  margin-bottom:56px;
+}
+.packages-head .t-display{color:var(--cream)}
+.packages-head .t-label{color:var(--cream);opacity:.4}
+
+.pkg-list{display:flex;flex-direction:column}
+
+.pkg-item{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:40px;
+  padding:36px 0;
+  border-top:1px solid rgba(245,243,237,.14);
+  transition:padding-left .25s;
+}
+.pkg-item:last-child{border-bottom:1px solid rgba(245,243,237,.14)}
+.pkg-item:hover{padding-left:12px}
+
+.pkg-left{
+  display:flex;flex-direction:column;
+  gap:10px;align-items:flex-start;
+  flex:1;
+}
+
+.pkg-name-row{display:flex;align-items:center;gap:14px}
+.pkg-name{
+  font-family:'Cormorant Garamond',serif;
+  font-size:var(--h3);font-weight:300;
+  color:var(--cream);letter-spacing:-.3px;
+}
+
+.pkg-price{
+  font-family:'Cormorant Garamond',serif;
+  font-size:clamp(40px,3.5vw,52px);
+  font-weight:300;letter-spacing:-1.5px;
+  color:var(--cream);line-height:1;
+  white-space:nowrap;
+}
+.pkg-price sup{
+  font-size:16px;letter-spacing:0;
+  vertical-align:super;opacity:.5;
+  font-family:'Raleway',sans-serif;font-weight:400;
+}
+
+.pkg-desc{
+  font-family:'Raleway',sans-serif;
+  font-size:var(--base);font-weight:400;
+  line-height:1.75;color:var(--cream);opacity:.8;
+}
+
+.pkg-right{flex-shrink:0}
+
+/* ── TESTIMONIAL ─────────────────────────*/
+.testimonial{
+  padding:var(--section) 60px;
+  background:var(--sand);
+  display:grid;grid-template-columns:200px 1fr;gap:80px;align-items:center;
+}
+.testi-meta .t-label{margin-bottom:12px}
+.testi-name{
+  font-family:'Cormorant Garamond',serif;
+  font-size:var(--h3);font-weight:300;
+  color:var(--ink);
+}
+.testi-quote{
+  font-family:'Cormorant Garamond',serif;
+  font-size:clamp(20px,2.2vw,28px);
+  font-weight:300;line-height:1.5;
+  color:var(--ink);
+  position:relative;padding-left:28px;
+}
+.testi-quote::before{
+  content:'\201C';
+  position:absolute;left:0;top:-6px;
+  font-size:56px;line-height:1;
+  color:var(--ink);opacity:.1;
+}
+
+/* ── FAQ ─────────────────────────────────*/
+.faq{padding:var(--section) 60px;background:var(--cream)}
+.faq-inner{max-width:680px}
+.faq-inner .t-display{margin-bottom:48px}
+.faq-item{border-top:1px solid rgba(116,113,75,.15);padding:22px 0}
+.faq-item:last-child{border-bottom:1px solid rgba(116,113,75,.15)}
+.faq-q{
+  width:100%;background:none;border:none;cursor:pointer;
+  display:flex;align-items:center;justify-content:space-between;gap:20px;
+  text-align:left;padding:0;
+  font-family:'Raleway',sans-serif;font-size:var(--base);font-weight:600;
+  color:var(--ink);
+}
+.faq-icon{width:18px;height:18px;position:relative;flex-shrink:0}
+.faq-icon::before,.faq-icon::after{content:'';position:absolute;background:var(--olive);transition:transform .3s,opacity .3s}
+.faq-icon::before{width:1.5px;height:11px;top:3.5px;left:8px}
+.faq-icon::after{width:11px;height:1.5px;top:8px;left:3.5px}
+.faq-item.open .faq-icon::before{transform:rotate(90deg);opacity:0}
+.faq-ans{max-height:0;overflow:hidden;transition:max-height .35s ease}
+.faq-item.open .faq-ans{max-height:180px;padding-top:12px}
+
+/* ── CONTACT ─────────────────────────────*/
+.contact{
+  padding:var(--section) 60px;
+  background:var(--ink);
+  display:grid;grid-template-columns:1fr 1fr;gap:80px;align-items:center;
+}
+.contact-left .t-label{color:var(--cream);opacity:.3;margin-bottom:20px}
+.contact-left .t-display{color:var(--cream)}
+
+.contact-right{display:flex;flex-direction:column;gap:28px}
+.contact-email{
+  font-family:'Cormorant Garamond',serif;
+  font-size:clamp(20px,2vw,28px);font-weight:300;
+  color:var(--cream);text-decoration:none;
+  display:inline-block;position:relative;padding-bottom:3px;
+}
+.contact-email::after{content:'';position:absolute;bottom:0;left:0;right:100%;height:1px;background:var(--cream);opacity:.3;transition:right .35s}
+.contact-email:hover::after{right:0}
+.contact-note{font-size:var(--sm);color:var(--cream);opacity:.35;line-height:1.75}
+.social-row{display:flex;gap:10px}
+.soc{
+  width:42px;height:42px;
+  border:1px solid rgba(245,243,237,.2);border-radius:var(--r);
+  display:flex;align-items:center;justify-content:center;
+  text-decoration:none;color:var(--cream);
+  transition:border-color .2s,background .2s,transform .2s;
+}
+.soc:hover{border-color:rgba(245,243,237,.6);background:rgba(245,243,237,.07);transform:translateY(-2px)}
+.soc svg{width:17px;height:17px;stroke:currentColor;fill:none;stroke-width:1.6}
+
+/* ── FOOTER ──────────────────────────────*/
+footer{
+  background:var(--warm);
+  padding:28px 60px;
+  border-top:1px solid rgba(116,113,75,.15);
+  display:flex;align-items:center;justify-content:space-between;gap:24px;
+}
+.footer-logo{
+  font-family:'Cormorant Garamond',serif;
+  font-size:16px;font-weight:400;letter-spacing:3px;text-transform:uppercase;
+  color:var(--ink);text-decoration:none;opacity:.65;
+}
+.footer-nav{display:flex;gap:28px}
+.footer-nav a{
+  font-family:'Raleway',sans-serif;
+  font-size:10px;font-weight:600;letter-spacing:2.5px;text-transform:uppercase;
+  color:var(--ink);text-decoration:none;opacity:.5;transition:opacity .2s;
+}
+.footer-nav a:hover{opacity:1}
+.footer-copy{
+  font-family:'Raleway',sans-serif;
+  font-size:11px;color:var(--ink);opacity:.35;
+}
+
+/* ════════════════════════════════════════
+   RESPONSIVE
+════════════════════════════════════════ */
+@media(max-width:1024px){
+  header{padding:16px 32px}
+  .hero-text{padding:100px 40px 60px}
+  .gallery,.faq,.contact{padding-left:40px;padding-right:40px}
+  .about-text{padding:60px 40px}
+  .packages,.testimonial{padding-left:40px;padding-right:40px}
+  footer{padding:24px 40px}
+  .gallery-grid{grid-template-rows:280px 200px}
+  .contact{gap:48px}
+}
+
+@media(max-width:768px){
+  header{padding:14px 20px}
+  nav,.btn.header-btn{display:none}
+  .burger{display:flex}
+  .mobile-menu{display:flex}
+
+  /* hero stacked */
+  .hero{grid-template-columns:1fr}
+  .hero-img{height:52svh}
+  .hero-text{padding:40px 20px 52px}
+
+  /* sections */
+  .gallery,.faq{padding:var(--section-h) 20px}
+  .packages{padding:var(--section-h) 20px}
+  .testimonial{padding:var(--section-h) 20px}
+  .contact{padding:var(--section-h) 20px}
+
+  .gallery-head{flex-direction:column;align-items:flex-start;gap:20px}
+  .gallery-grid{
+    grid-template-columns:1fr 1fr;
+    grid-template-rows:190px 190px 160px;
+  }
+  .gcell.tall{grid-row:span 1}
+  .gcell.wide{grid-column:span 2}
+
+  /* about stacked */
+  .about{grid-template-columns:1fr}
+  .about-img{min-height:0;aspect-ratio:3/4}
+  .about-text{padding:40px 20px}
+
+  /* packages mobile */
+  .packages-head{flex-direction:column;align-items:flex-start;gap:12px}
+  .pkg-item{
+    flex-direction:column;
+    align-items:stretch;
+    gap:16px;
+    padding:28px 0;
+  }
+  .pkg-right{display:contents} /* кнопка выходит из pkg-right в поток */
+  .pkg-btn{width:100%;justify-content:center}
+  .pkg-price{font-size:44px}
+
+  /* testimonial stacked */
+  .testimonial{grid-template-columns:1fr;gap:24px}
+
+  /* contact stacked */
+  .contact{grid-template-columns:1fr}
+
+  /* footer */
+  footer{flex-direction:column;align-items:flex-start;gap:20px;padding:24px 20px}
+  .footer-nav{flex-wrap:wrap;gap:16px}
+}
+
+@media(max-width:400px){
+  .gallery-grid{grid-template-columns:1fr;grid-template-rows:repeat(4,200px)}
+  .gcell.tall,.gcell.wide{grid-column:1;grid-row:span 1}
+}
+</style>
+</head>
+<body>
+
+<div class="mobile-menu" id="mm">
+  <a href="#portfolio" class="ml">Portfolio</a>
+  <a href="#o-mnie" class="ml">O mnie</a>
+  <a href="#pakiety" class="ml">Pakiety</a>
+  <a href="#kontakt" class="ml">Kontakt</a>
+</div>
+
+<header id="hdr">
+  <a href="#" class="logo">Iza Bilska</a>
+  <nav>
+    <a href="#portfolio">Portfolio</a>
+    <a href="#o-mnie">O mnie</a>
+    <a href="#pakiety">Pakiety</a>
+    <a href="#kontakt">Kontakt</a>
+  </nav>
+  <a href="#kontakt" class="btn header-btn">Napisz do mnie</a>
+  <button class="burger" id="brg" aria-label="Menu"><span></span><span></span><span></span></button>
+</header>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-img">
+    <img src="https://www.figma.com/api/mcp/asset/7fbf3a70-e0b9-4bf6-87ff-61a13b02c67c" alt="Sesja rodzinna"/>
+  </div>
+  <div class="hero-text">
+    <p class="t-label">Fotografia Wieliczka</p>
+    <h1 class="t-display t-h1">Chwile,<br>które zostają<br>z tobą.</h1>
+    <p class="t-body">Fotografuję ludzi tak, żeby zdjęcia chciało się oglądać w kółko. Naturalne światło, żadnych wymuszonych póz.</p>
+    <a href="#portfolio" class="btn">Zobacz portfolio</a>
+  </div>
+</section>
+
+<!-- MARQUEE -->
+<div class="marquee-wrap" aria-hidden="true">
+  <div class="marquee-track">
+    <span class="marquee-item">Fotografia</span>
+    <span class="marquee-item">Wieliczka</span>
+    <span class="marquee-item">Lifestyle</span>
+    <span class="marquee-item">Naturalne światło</span>
+    <span class="marquee-item">Chwile</span>
+    <span class="marquee-item">Sesje rodzinne</span>
+    <span class="marquee-item">Portret</span>
+    <span class="marquee-item">Bez póz</span>
+    <span class="marquee-item">Fotografia</span>
+    <span class="marquee-item">Wieliczka</span>
+    <span class="marquee-item">Lifestyle</span>
+    <span class="marquee-item">Naturalne światło</span>
+    <span class="marquee-item">Chwile</span>
+    <span class="marquee-item">Sesje rodzinne</span>
+    <span class="marquee-item">Portret</span>
+    <span class="marquee-item">Bez póz</span>
+  </div>
+</div>
+
+<!-- GALLERY -->
+<section class="gallery" id="portfolio">
+  <div class="gallery-head">
+    <h2 class="t-display t-h2 r">Wybrane<br>realizacje</h2>
+    <a href="#" class="btn r d1">Pełne portfolio</a>
+  </div>
+  <div class="gallery-grid r d1">
+    <div class="gcell tall">
+      <img src="https://www.figma.com/api/mcp/asset/7fbf3a70-e0b9-4bf6-87ff-61a13b02c67c" alt="" style="object-position:center 30%"/>
+    </div>
+    <div class="gcell">
+      <img src="https://www.figma.com/api/mcp/asset/28f85279-cc6f-4c2e-8fe4-34c26f928583" alt="" style="object-position:center top"/>
+    </div>
+    <div class="gcell">
+      <img src="https://www.figma.com/api/mcp/asset/5dfc28d6-5908-471c-b49f-572380b278cb" alt="" style="object-position:center 30%"/>
+    </div>
+    <div class="gcell wide">
+      <img src="https://www.figma.com/api/mcp/asset/5dfc28d6-5908-471c-b49f-572380b278cb" alt="" style="object-position:center 65%"/>
+    </div>
+  </div>
+</section>
+
+<!-- ABOUT -->
+<section class="about" id="o-mnie">
+  <div class="about-img r">
+    <img src="https://www.figma.com/api/mcp/asset/28f85279-cc6f-4c2e-8fe4-34c26f928583" alt="Iza Bilska"/>
+  </div>
+  <div class="about-text">
+    <p class="t-label r">O mnie</p>
+    <h2 class="t-display t-h2 r d1">Hej,<br>jestem Iza.</h2>
+    <div class="t-body r d2">
+      <p>Zaczęło się od zwykłej potrzeby zatrzymywania chwil. Zawsze lubiłam patrzeć uważniej — na światło wpadające przez okno, spojrzenia między ludźmi, drobne momenty, które szybko mijają.</p>
+      <p>Dlatego bliska jest mi fotografia lifestyle. Naturalna, niewymuszona, bez sztucznego pozowania. Bardziej o byciu niż o ustawianiu się do zdjęcia.</p>
+    </div>
+  </div>
+</section>
+
+<!-- PACKAGES -->
+<section class="packages" id="pakiety">
+  <div class="packages-head">
+    <h2 class="t-display t-h2 r">Pakiety<br>sesji</h2>
+    <span class="t-label r d1">Wybierz swój</span>
+  </div>
+  <div class="pkg-list">
+
+    <div class="pkg-item r">
+      <div class="pkg-left">
+        <div class="pkg-name-row">
+          <span class="pkg-name">Mini</span>
+        </div>
+        <div class="pkg-price">150<sup>zł</sup></div>
+        <p class="pkg-desc">10 ujęć elektronicznych · 10 odbitek jedwabnych · galeria online · eleganckie opakowanie</p>
+      </div>
+      <div class="pkg-right">
+        <a href="#kontakt" class="btn btn-light pkg-btn">Zapytaj o termin</a>
+      </div>
+    </div>
+
+    <div class="pkg-item r d1">
+      <div class="pkg-left">
+        <div class="pkg-name-row">
+          <span class="pkg-name">Standard</span>
+          <span class="chip">Popularny</span>
+        </div>
+        <div class="pkg-price">250<sup>zł</sup></div>
+        <p class="pkg-desc">20 ujęć elektronicznych · 20 odbitek jedwabnych · galeria online · eleganckie opakowanie</p>
+      </div>
+      <div class="pkg-right">
+        <a href="#kontakt" class="btn btn-light pkg-btn">Zapytaj o termin</a>
+      </div>
+    </div>
+
+    <div class="pkg-item r d2">
+      <div class="pkg-left">
+        <div class="pkg-name-row">
+          <span class="pkg-name">Maxi</span>
+        </div>
+        <div class="pkg-price">350<sup>zł</sup></div>
+        <p class="pkg-desc">40 ujęć elektronicznych · 40 odbitek jedwabnych · galeria online · eleganckie opakowanie</p>
+      </div>
+      <div class="pkg-right">
+        <a href="#kontakt" class="btn btn-light pkg-btn">Zapytaj o termin</a>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- TESTIMONIAL -->
+<section class="testimonial">
+  <div class="testi-meta r">
+    <p class="t-label">Opinia</p>
+    <p class="testi-name">Ewelina</p>
+  </div>
+  <blockquote class="testi-quote r d1">
+    Zdjęcia bardzo mi się podobają, są naprawdę super. To taka pamiątka, że aż żałuję, że nie robimy takich zdjęć co roku. Jestem naprawdę wzruszona.
+  </blockquote>
+</section>
+
+<!-- FAQ -->
+<section class="faq">
+  <div class="faq-inner">
+    <h2 class="t-display t-h2 r">Masz pytania?</h2>
+    <div>
+      <div class="faq-item r">
+        <button class="faq-q">Jak zarezerwować sesję?<span class="faq-icon"></span></button>
+        <div class="faq-ans t-small">Napisz do mnie, ustalamy termin i lokalizację. Rezerwację potwierdzam po wpłacie zaliczki 30% wartości sesji.</div>
+      </div>
+      <div class="faq-item r d1">
+        <button class="faq-q">Co jeśli będzie zła pogoda?<span class="faq-icon"></span></button>
+        <div class="faq-ans t-small">Bez stresu — przełożenie sesji ze względu na pogodę jest zawsze bezpłatne. Ustalamy nowy termin w ciągu 2 tygodni.</div>
+      </div>
+      <div class="faq-item r d2">
+        <button class="faq-q">Fotografujesz śluby?<span class="faq-icon"></span></button>
+        <div class="faq-ans t-small">Nie wykonuję fotografii ślubnej ani reportażowej z imprez. Moją przestrzenią są sesje zdjęciowe i naturalne kadry w spokojnej atmosferze.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CONTACT -->
+<section class="contact" id="kontakt">
+  <div class="contact-left">
+    <p class="t-label r">Kontakt</p>
+    <h2 class="t-display t-h2 r d1">Napisz<br>do mnie.</h2>
+  </div>
+  <div class="contact-right r d2">
+    <a href="mailto:iza@izabilska.com" class="contact-email">iza@izabilska.com</a>
+    <p class="contact-note">Odpiszę w ciągu 24 godzin. Jeśli wolisz, możesz też napisać na Instagramie.</p>
+    <div class="social-row">
+      <a href="#" class="soc" aria-label="Instagram">
+        <svg viewBox="0 0 24 24"><rect x="2" y="2" width="20" height="20" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="1" fill="currentColor" stroke="none"/></svg>
+      </a>
+      <a href="#" class="soc" aria-label="Facebook">
+        <svg viewBox="0 0 24 24"><path d="M18 2h-3a5 5 0 00-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 011-1h3z"/></svg>
+      </a>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <a href="#" class="footer-logo">Iza Bilska</a>
+  <nav class="footer-nav">
+    <a href="#portfolio">Portfolio</a>
+    <a href="#o-mnie">O mnie</a>
+    <a href="#pakiety">Pakiety</a>
+    <a href="#kontakt">Kontakt</a>
+  </nav>
+  <span class="footer-copy">© 2026 Iza Bilska</span>
+</footer>
+
+<script>
+const obs=new IntersectionObserver(e=>e.forEach(x=>{
+  if(x.isIntersecting){x.target.classList.add('v');obs.unobserve(x.target)}
+}),{threshold:.1});
+document.querySelectorAll('.r').forEach(el=>obs.observe(el));
+
+const hdr=document.getElementById('hdr');
+window.addEventListener('scroll',()=>hdr.classList.toggle('scrolled',scrollY>30),{passive:true});
+
+const brg=document.getElementById('brg'),mm=document.getElementById('mm');
+brg.addEventListener('click',()=>{
+  const o=brg.classList.toggle('open');
+  mm.classList.toggle('open',o);
+  document.body.style.overflow=o?'hidden':'';
+});
+document.querySelectorAll('.ml').forEach(l=>l.addEventListener('click',()=>{
+  brg.classList.remove('open');mm.classList.remove('open');document.body.style.overflow='';
+}));
+
+document.querySelectorAll('.faq-q').forEach(btn=>{
+  btn.addEventListener('click',()=>{
+    const item=btn.closest('.faq-item'),open=item.classList.contains('open');
+    document.querySelectorAll('.faq-item').forEach(i=>i.classList.remove('open'));
+    if(!open)item.classList.add('open');
+  });
+});
+</script>
+</body>
+</html>
