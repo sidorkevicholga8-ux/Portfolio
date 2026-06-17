@@ -500,64 +500,94 @@ footer{
 }
 
 @media(max-width:768px){
-  header{padding:14px 20px}
+  /* tokens mobile */
+  :root{
+    --section:56px;
+    --section-h:40px;
+    --h1:clamp(36px,10vw,52px);
+    --h2:clamp(28px,7vw,38px);
+    --h3:clamp(20px,5vw,26px);
+    --base:15px;
+  }
+
+  header{padding:12px 16px}
   nav,.btn.header-btn{display:none}
   .burger{display:flex}
   .mobile-menu{display:flex}
 
-  /* hero stacked */
+  /* hero */
   .hero{grid-template-columns:1fr}
-  .hero-img{height:52svh}
-  .hero-text{padding:40px 20px 52px}
-  .hero-text .btn{align-self:flex-start;width:auto}
+  .hero-img{height:48svh;min-height:260px}
+  .hero-text{padding:28px 16px 44px}
+  .hero-text .t-label{margin-bottom:12px}
+  .hero-text .t-display{margin-bottom:20px}
+  .hero-text .t-body{margin-bottom:24px;max-width:100%}
+  .hero-text .btn{align-self:flex-start;width:auto;padding:12px 22px}
 
-  /* sections */
-  .gallery,.faq{padding:var(--section-h) 20px}
-  .packages{padding:var(--section-h) 20px}
-  .testimonial{padding:var(--section-h) 20px}
-  .contact{padding:var(--section-h) 20px}
+  /* marquee */
+  .marquee-item{padding:0 20px;font-size:9px}
 
-  .gallery-head{flex-direction:column;align-items:flex-start;gap:20px}
+  /* gallery */
+  .gallery{padding:40px 16px}
+  .gallery-head{flex-direction:column;align-items:flex-start;gap:16px;margin-bottom:24px}
   .gallery-grid{
     grid-template-columns:1fr 1fr;
-    grid-template-rows:190px 190px 160px;
+    grid-template-rows:160px 160px 130px;
+    gap:6px;
   }
   .gcell.tall{grid-row:span 1}
   .gcell.wide{grid-column:span 2}
 
-  /* about stacked */
+  /* about */
   .about{grid-template-columns:1fr}
-  .about-img{min-height:0;aspect-ratio:3/4}
-  .about-text{padding:40px 20px}
+  .about-img{min-height:0;aspect-ratio:4/3}
+  .about-text{padding:32px 16px}
+  .about-initial{font-size:180px;right:-10px;bottom:-20px}
 
-  /* packages mobile */
-  .packages-head{flex-direction:column;align-items:flex-start;gap:12px}
+  /* packages */
+  .packages{padding:40px 16px}
+  .packages-head{flex-direction:column;align-items:flex-start;gap:8px;margin-bottom:32px}
   .pkg-item{
     flex-direction:column;
     align-items:stretch;
-    gap:16px;
-    padding:28px 0;
+    gap:12px;
+    padding:24px 0;
   }
-  .pkg-right{display:contents} /* кнопка выходит из pkg-right в поток */
-  .pkg-btn{width:100%;justify-content:center}
-  .pkg-price{font-size:44px}
-
-  /* testimonial stacked */
-  .testimonial{padding:var(--section-h) 20px;gap:32px}
-  .testi-quotes{grid-template-columns:1fr;gap:28px}
-
-  .pkg-featured{margin:0;padding-left:0;padding-right:0;border-radius:0;border-top:2px solid rgba(245,243,237,.3);border-bottom:2px solid rgba(245,243,237,.3)}
+  .pkg-right{display:contents}
+  .pkg-btn{width:100%;justify-content:center;padding:14px}
+  .pkg-price{font-size:40px}
+  .pkg-name{font-size:22px}
+  .pkg-desc{font-size:14px}
+  .pkg-featured{margin:0;padding-left:0;padding-right:0;border-radius:0;border-top:1.5px solid rgba(245,243,237,.25);border-bottom:1.5px solid rgba(245,243,237,.25)}
   .pkg-featured:hover{padding-left:0}
-  .faq-cta{padding:32px 20px;flex-direction:column;align-items:flex-start;gap:20px}
+
+  /* testimonial */
+  .testimonial{padding:40px 16px;gap:24px}
+  .testi-quotes{grid-template-columns:1fr;gap:24px}
+  .testi-quote{font-size:16px;padding-left:16px}
+
+  /* faq */
+  .faq{padding:40px 16px}
+  .faq-inner .t-display{margin-bottom:28px}
+  .faq-q{font-size:14px}
+  .faq-cta{padding:28px 16px;flex-direction:column;align-items:flex-start;gap:16px}
+  .faq-cta-text{font-size:22px}
+
+  /* contact */
+  .contact{grid-template-columns:1fr;padding:40px 16px;gap:32px}
+  .contact-email{font-size:clamp(16px,5vw,22px)}
 
   /* footer */
-  footer{flex-direction:column;align-items:flex-start;gap:20px;padding:24px 20px}
-  .footer-nav{flex-wrap:wrap;gap:16px}
+  footer{flex-direction:column;align-items:flex-start;gap:16px;padding:24px 16px}
+  .footer-nav{flex-wrap:wrap;gap:14px}
+  .footer-copy{font-size:11px}
 }
 
 @media(max-width:400px){
-  .gallery-grid{grid-template-columns:1fr;grid-template-rows:repeat(4,200px)}
+  :root{--h1:clamp(32px,9vw,42px);--h2:clamp(24px,7vw,32px)}
+  .gallery-grid{grid-template-columns:1fr;grid-template-rows:repeat(4,180px)}
   .gcell.tall,.gcell.wide{grid-column:1;grid-row:span 1}
+  .hero-img{height:44svh}
 }
 </style>
 </head>
